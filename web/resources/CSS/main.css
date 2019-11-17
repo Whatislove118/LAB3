@@ -1,0 +1,14 @@
+body{
+    background: antiquewhite;
+    font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+}
+#hat{
+    border: 2px solid black;
+    text-align: center;
+    width:250px;
+    background: blueviolet;
+
+}
+#R{
+    width: 140px;
+}

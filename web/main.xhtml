@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ace="http://www.icefaces.org/icefaces/components"
+     >
+<f:view>
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <h:outputScript library="JS" name="jquery-3.4.1.min.js"/>
+        <h:outputStylesheet name="CSS/main.css"/>
+
+    </h:head>
+    <h:body >
+        <div id="picture">
+            <canvas id="graph" width="280px" height="280px" style="border: 2px solid black;border-radius:25px;background: white;position: absolute; right: 175px;
+    bottom:145px;"/>
+        </div>
+        <div id="data">
+            <h4>Форма ввода</h4>
+            <h:form>
+                <div id="chooseX">
+                    <h:outputLabel for="xValue" value="Координата X:"/>
+                    <h:outputText id="xValue" value="#{ArCh.valueX}">
+                    </h:outputText><br/>
+                    <h:commandButton type="button" id="cb1" value="-5"><f:ajax render="xValue" execute="cb1" event="click"/></h:commandButton>
+                    <h:commandButton type="button" id="cb2" value="-4"> <f:ajax render="xValue" execute="cb2" event="click"/> </h:commandButton>
+                    <h:commandButton type="button" id="cb3" value="-3"></h:commandButton>
+                    <h:commandButton type="button" id="cb4" value="-2"></h:commandButton>
+                    <h:commandButton type="button" id="cb5" value="-1"></h:commandButton>
+                    <h:commandButton type="button" id="cb6" value="0"></h:commandButton>
+                    <h:commandButton type="button" id="cb7" value="1"></h:commandButton>
+                    <h:commandButton type="button" id="cb8" value="2"></h:commandButton>
+                    <h:commandButton type="button" id="cb9" value="3"></h:commandButton>
+                </div>
+                <br/>
+                <div id="y">
+                    <h:outputLabel for="textY" value="Координата Y:"/>
+                    <h:inputText id="textY" value="#{ArCh.valueY}">
+                        <f:validateDoubleRange minimum="-3" maximum="3"/>
+                        <f:validateLength minimum="1" maximum="7"/>
+                    </h:inputText>
+                </div>
+                <h:outputScript library="JS" name="main.js"/>
+                <br/>
+                <div id="r">
+                    <h:outputLabel for="R" value="Коэффициент R: " />
+                    <h:outputText id="rValue" value="#{ArCh.valueR / 2}"/><br/>
+                    <ace:sliderEntry style="margin-top: 10px;" id="R"
+                                     axis="x"
+                                     stepPercent="16.66666" value="#{ArCh.valueR}" showLabels="false"  min="2" max="8" length="300" onSlideEnd="drawGraphWithR(ice.ace.instance('j_idt8-R').getValue())" >
+                        <ace:ajax render="rValue" event="slide" execute="R" />
+<!--                        <ace:ajax onStart="drawGraphWithR(ice.ace.instance('j_idt8-R').getValue())"/>-->
+                    </ace:sliderEntry>
+                </div>
+                <h:commandButton value="Пробил?" action="#{ArCh.putPointsFromForm()}"/>
+                <h:commandButton value="What time is it???" action="Time" immediate="true" onclick="alert('Ваша форма будет сброшена. Вы уверены?')"/>
+            </h:form>
+        </div>
+        <div id="result_table">
+            <h:dataTable value="#{ArCh.getPoints()}" var="points">
+                <h:column>
+                    <f:facet name="header">X</f:facet>
+                    #{points.x}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Y</f:facet>
+                    #{points.y}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">R</f:facet>
+                    #{points.r}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Headshot??</f:facet>
+                    #{points.isProbil}
+                </h:column>
+            </h:dataTable>
+        </div>
+    </h:body>
+</f:view>
+
+</html>
+
