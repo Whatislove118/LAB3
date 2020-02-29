@@ -13,75 +13,100 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <h:outputScript library="JS" name="jquery-3.4.1.min.js"/>
         <h:outputStylesheet name="CSS/main.css"/>
+        <h:outputScript library="JS" name="main.js"/>
 
     </h:head>
-    <h:body >
-        <div id="picture">
-            <canvas id="graph" width="280px" height="280px" style="border: 2px solid black;border-radius:25px;background: white;position: absolute; right: 175px;
-    bottom:145px;"/>
-        </div>
+    <h:body>
         <div id="data">
-            <h4>Форма ввода</h4>
-            <h:form>
+            <h3>Форма ввода</h3>
+            <h:form prependId="false" id="form">
+                <div id="picture">
+                    <canvas id="graph" width="280px" height="280px" style="border: 2px solid black;border-radius:25px;background: white;position: absolute; right: 175px;
+                    bottom:145px;">
+                    </canvas>
+                </div>
                 <div id="chooseX">
-                    <h:outputLabel for="xValue" value="Координата X:"/>
-                    <h:outputText id="xValue" value="#{ArCh.valueX}">
-                    </h:outputText><br/>
-                    <h:commandButton type="button" id="cb1" value="-5"><f:ajax render="xValue" execute="cb1" event="click"/></h:commandButton>
-                    <h:commandButton type="button" id="cb2" value="-4"> <f:ajax render="xValue" execute="cb2" event="click"/> </h:commandButton>
-                    <h:commandButton type="button" id="cb3" value="-3"></h:commandButton>
-                    <h:commandButton type="button" id="cb4" value="-2"></h:commandButton>
-                    <h:commandButton type="button" id="cb5" value="-1"></h:commandButton>
-                    <h:commandButton type="button" id="cb6" value="0"></h:commandButton>
-                    <h:commandButton type="button" id="cb7" value="1"></h:commandButton>
-                    <h:commandButton type="button" id="cb8" value="2"></h:commandButton>
-                    <h:commandButton type="button" id="cb9" value="3"></h:commandButton>
+                    <h:outputLabel for="xHid" value="Координата X:"/>
+                    <h:inputHidden id="xHid" value="#{ArCh.canvasX}"/>
+                    <h:inputHidden id="yHid" value="#{ArCh.canvasY}"/>
+                    <h:inputHidden id="rHid" value="#{ArCh.valueR}"/>
+                    <h:commandButton id="submitCanvas" value="go" type="submit" action="#{ArCh.putPointsFromCanvas}" style="display: none">
+                        <f:ajax render="result_table" execute="@form"/>
+                    </h:commandButton>
+                    <br/>
+                    <h:commandButton type="button" id="cb-5" value="-5" ></h:commandButton>
+                    <h:commandButton type="button" id="cb-4" value="-4"></h:commandButton>
+                    <h:commandButton type="button" id="cb-3" value="-3"></h:commandButton>
+                    <h:commandButton type="button" id="cb-2" value="-2"></h:commandButton>
+                    <h:commandButton type="button" id="cb-1" value="-1"></h:commandButton>
+                    <h:commandButton type="button" id="cb0" value="0"></h:commandButton>
+                    <h:commandButton type="button" id="cb1" value="1"></h:commandButton>
+                    <h:commandButton type="button" id="cb2" value="2"></h:commandButton>
+                    <h:commandButton type="button" id="cb3" value="3"></h:commandButton>
+                    <h:outputText id="err1" value="X не был выбран!" style="visibility: hidden"/>
+                    <h:inputHidden id="xValue" value="#{ArCh.valueX}"/>
                 </div>
                 <br/>
                 <div id="y">
                     <h:outputLabel for="textY" value="Координата Y:"/>
-                    <h:inputText id="textY" value="#{ArCh.valueY}">
-                        <f:validateDoubleRange minimum="-3" maximum="3"/>
-                        <f:validateLength minimum="1" maximum="7"/>
-                    </h:inputText>
+                    <h:inputText id="textY" value="#{ArCh.valueY}" maxlength="7"/>
+                    <h:outputText id="err2" value="Y не был введен!" style="visibility: hidden"/>
                 </div>
-                <h:outputScript library="JS" name="main.js"/>
                 <br/>
                 <div id="r">
                     <h:outputLabel for="R" value="Коэффициент R: " />
-                    <h:outputText id="rValue" value="#{ArCh.valueR / 2}"/><br/>
+                    <h:outputText id="rValue"  value="#{ArCh.valueR / 2}"/><br/>
                     <ace:sliderEntry style="margin-top: 10px;" id="R"
                                      axis="x"
-                                     stepPercent="16.66666" value="#{ArCh.valueR}" showLabels="false"  min="2" max="8" length="300" onSlideEnd="drawGraphWithR(ice.ace.instance('j_idt8-R').getValue())" >
+                                     stepPercent="16.66666" value="#{ArCh.valueR}"  showLabels="false"  min="2" max="8" length="300"  onSlideEnd="
+                                     let canvas = document.getElementById('graph');
+                                        let ctx = canvas.getContext('2d');
+                                     ctx.save();
+                                        ctx.setTransform(1, 0, 0, 1, 0, 0);
+                                         ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                    ctx.restore();
+                                    drawGraphWithR(ice.ace.instance('R').getValue());
+                                     drawPicture();
+                                     drawPoints();" >
                         <ace:ajax render="rValue" event="slide" execute="R" />
 <!--                        <ace:ajax onStart="drawGraphWithR(ice.ace.instance('j_idt8-R').getValue())"/>-->
                     </ace:sliderEntry>
+                    <h:outputText id="err3" value="Выберите R" style="visibility: hidden"/>
                 </div>
-                <h:commandButton value="Пробил?" action="#{ArCh.putPointsFromForm()}"/>
-                <h:commandButton value="What time is it???" action="Time" immediate="true" onclick="alert('Ваша форма будет сброшена. Вы уверены?')"/>
+                <h:commandButton value="Пробил?" id="sumbit" type="submit" action="#{ArCh.putPointsFromForm}" onclick="return checkAll()">
+                    <f:ajax execute="@form" render="result_table"/>
+                </h:commandButton>
+                <h:commandButton value="What time is it???" id="time" action="Time" immediate="true" onclick="alert('Ваша форма будет сброшена. Вы уверены?')"/>
             </h:form>
         </div>
-        <div id="result_table">
-            <h:dataTable value="#{ArCh.getPoints()}" var="points">
+        <div id="result">
+            <h3>Результаты</h3>
+            <hr/>
+            <h:dataTable value="#{ArCh.points}" var="points" id="result_table">
                 <h:column>
                     <f:facet name="header">X</f:facet>
+                    <hr/>
                     #{points.x}
                 </h:column>
                 <h:column>
                     <f:facet name="header">Y</f:facet>
+                    <hr/>
                     #{points.y}
                 </h:column>
                 <h:column>
                     <f:facet name="header">R</f:facet>
+                    <hr/>
                     #{points.r}
                 </h:column>
                 <h:column>
                     <f:facet name="header">Headshot??</f:facet>
-                    #{points.isProbil}
+                    <hr/>
+                    #{points.probil ? "HEADSHOT" : "MISS"}
                 </h:column>
             </h:dataTable>
         </div>
     </h:body>
+    <h:outputScript library="JS" name="foto.js"/>
 </f:view>
 
 </html>

@@ -1,14 +1,38 @@
 body{
-    background: antiquewhite;
+    background:antiquewhite;
     font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
-}
-#hat{
-    border: 2px solid black;
-    text-align: center;
-    width:250px;
-    background: blueviolet;
-
 }
 #R{
     width: 140px;
 }
+#data{
+    color: yellow;
+    border: 2px solid black;
+    border-radius: 25px;
+    padding: 10px;
+    width: 300px;
+    background: blueviolet;
+}
+h3{
+    text-align: center;
+}
+#result{
+    position: absolute;
+    left: 20px;
+    bottom: 50px;
+    border:2px solid black;
+    border-radius: 25px;
+    background:blueviolet;
+    color: yellow;
+    overflow: auto;
+    height: 300px;
+    width: 550px;
+    padding: 10px;
+
+}
+#time{
+    position: absolute;
+    left:220px;
+    top:275px;
+}
+

@@ -4,8 +4,20 @@ body{
 }
 #hat{
     border: 2px solid black;
+    border-radius: 25px;
     text-align: center;
-    width:250px;
+    width:350px;
     background: blueviolet;
-
+    color: yellow;
+}
+#time{
+    border:2px solid black;
+    border-radius: 25px;
+    background: blueviolet;
+    color: yellow;
+    width: 180px;
+    padding: 10px;
+    position: absolute;
+    right: 10px;
+    top:10px;
 }

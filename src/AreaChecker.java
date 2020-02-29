@@ -1,3 +1,4 @@
+import org.hibernate.Session;
 import org.icefaces.util.JavaScriptRunner;
 
 import javax.faces.bean.ManagedBean;
@@ -10,81 +11,89 @@ import java.util.List;
 @ManagedBean(eager = true,name = "ArCh")
 @SessionScoped
 public class AreaChecker implements Serializable {
-    private String valueX;
-    private String canvasX;
-    private String valueY;
-    private String canvasY;
-    private String valueR;
-    private ArrayList<Point> arrPoints = new ArrayList<>();
+    private double valueX;
+    private double canvasX;
+    private double valueY;
+    private double canvasY;
+    private double valueR;
+    private List<Point> arrPoints = new ArrayList<>();
 
 
-    public String getValueX() {
+    public double getValueX() {
         return valueX;
     }
 
-    public void setValueX(String x) {
-        System.out.println("X = " + valueX);
+    public void setValueX(double x) {
         valueX = x;
     }
 
-    public String getCanvasX() {
+    public double getCanvasX() {
         return canvasX;
     }
 
-    public void setCanvasX(String canvasX) {
+    public void setCanvasX(double canvasX) {
         this.canvasX = canvasX;
     }
 
-    public String getValueY() {
+    public double getValueY() {
         return valueY;
     }
 
-    public void setValueY(String y) {
-        System.out.println("Y = " + valueY);
+    public void setValueY(double y) {
         valueY = y;
     }
 
-    public String getCanvasY() {
+    public double getCanvasY() {
         return canvasY;
     }
 
-    public void setCanvasY(String canvasY) {
+    public void setCanvasY(double canvasY) {
         this.canvasY = canvasY;
     }
 
-    public String getValueR() {
+    public double getValueR() {
         return valueR;
     }
 
-    public void setValueR(String r) {
-        System.out.println("R = " + valueR);
+    public void setValueR(double r) {
         this.valueR = r;
     }
 
     public void putPointsFromForm(){
-        double y = Double.parseDouble(this.valueY);
-        double x = Double.parseDouble(this.valueX);
-        double r= Double.parseDouble(this.valueR);
-        Point point = new Point(x,y,r);
-        arrPoints.add(point);
+        System.out.println("X = "+valueX);
+        System.out.println("Y = "+valueY);
+        System.out.println("R = "+valueR/2);
+        Point point = new Point(valueX,valueY,valueR/2);
         toDB(point);
 
     }
 
     public void putPointsFromCanvas(){
-        double x = Double.parseDouble(this.canvasX);
-        double y = Double.parseDouble(this.canvasY);
-        double r= Double.parseDouble(this.valueR);
-        Point point = new Point(x,y,r);
-        arrPoints.add(point);
+        System.out.println("X = "+canvasX);
+        System.out.println("Y = "+canvasY);
+        System.out.println("R = "+valueR/2);
+        Point point = new Point(canvasX,canvasY,valueR/2);
         toDB(point);
     }
 
     public void toDB(Point point){
-
+        try (Session session = HibernateConnection.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.save(point);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public List<Point> getPoints(){
-        return this.arrPoints;
+        arrPoints=null;
+        try(Session session = HibernateConnection.getSessionFactory().openSession()){
+            session.beginTransaction();
+            arrPoints =  (ArrayList<Point>)session.createQuery("From Point").list();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return arrPoints;
     }
 }
