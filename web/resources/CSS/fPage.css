@@ -1,23 +1,30 @@
 body{
-    background: antiquewhite;
+    background: white;
     font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+    opacity: 0.8;
 }
 #hat{
     border: 2px solid black;
     border-radius: 25px;
     text-align: center;
     width:350px;
-    background: blueviolet;
+    background: black;
     color: yellow;
+    float: left;
+    opacity: 0.6;
 }
 #time{
     border:2px solid black;
     border-radius: 25px;
-    background: blueviolet;
-    color: yellow;
+    background: gold;
+    color: black;
     width: 180px;
     padding: 10px;
     position: absolute;
     right: 10px;
     top:10px;
+    opacity: 0.6;
+}
+#link{
+    position: center;
 }

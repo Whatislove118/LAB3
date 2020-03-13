@@ -20,4 +20,11 @@
             <redirect/>
         </navigation-case>
     </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/dop.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>DOP</from-outcome>
+            <to-view-id>/dop.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

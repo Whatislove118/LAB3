@@ -1,5 +1,5 @@
 $(document).ready(function () {
-        setInterval(getTime, 11000);
+        setInterval(getTime, 8000);
         getTime();
 });
 function getTime() {

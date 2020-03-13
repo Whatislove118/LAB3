@@ -65,20 +65,20 @@ public class Point {
     }
 
     public void checkProbil(){
-        if(this.X<0 && this.Y>0){
+        if(this.X<0 && this.Y<0){
             probil=false;
             return;
         }
-        if(this.X<=0 && this.Y<=0){
+        if(this.X>=0 && this.Y<=0){
             probil=Math.pow(this.X, 2) + Math.pow(this.Y,2) <= Math.pow(this.R/2, 2);
             return;
         }
         if(this.X>=0 && this.Y>=0){
-            probil=this.X<=R && this.Y<=R/2;
+            probil=this.X<=R/2 && this.Y<=R;
             return;
         }
-        if(this.X>=0 && this.Y<0){
-            probil=-this.Y/2<=-this.X/2+this.R/4;
+        if(this.X<=0 && this.Y>=0){
+            probil=this.Y<=this.X+this.R;
             return;
         }
         probil=false;

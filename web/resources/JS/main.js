@@ -1,58 +1,46 @@
 
 $(document).ready(function () {
-    document.getElementById('rValue').innerText='1.0';
+    document.getElementById('rValue').innerText='2.0';
     let canvas = document.getElementById('graph');
     let ctx = canvas.getContext('2d');
     canvas.addEventListener('click',checkClick,false);
     $('#R_hidden').val(0);
-    for(let i=-5; i<4;i++){
-        $('#cb'+i).click(function () {
-            changeX(i)
-        });
-    }
     refresh();
     drawGraphWithR(ice.ace.instance('R').getValue());
     drawPicture();
     $('#rHid').val('');
     $('#result').bind("DOMSubtreeModified",function(){
         drawPoints();
+        $("#err2").css("visibility", 'hidden');
+        $("#err1").css("visibility", 'hidden');
         refresh();
     });
-
-
 });
 
+function commandLink_val(e) {
+    $('#textY').val(e);
+    $('#inp-hid').val(e);
+    console.log($('#inp-hid').val())
+}
 function refresh() {
     $('#textY').val('');
     $('#xHid').val('');
     $('#yHid').val('');
-    for(let i=-5; i<4;i++){
-        $('#cb'+i).css('color','blue');
-    }
+    $('#xValue').val('');
 }
 
-function changeX(valueX) {
-    for(let i=-5; i<4;i++){
-        $('#cb'+i).css('color','blue');
-    }
-    $('#cb'+valueX).css('color','red');
-    $('#xValue').val(valueX);
-    console.log($('#xHid').val());
-}
 
 function paintArc(x,y) {
     let canvas = document.getElementById('graph');
     let ctx = canvas.getContext('2d');
     let xArc=x*28 +140;
-    let yArc=y;
+    let yArc=-y*28 + 140;
     ctx.beginPath();
     ctx.arc(xArc, yArc, 3, 0, 2 * Math.PI, false);
     ctx.closePath();
     ctx.fill();
 
-
 }
-
 
 function checkClick(e) {
     let r=ice.ace.instance('R').getValue();
@@ -79,7 +67,7 @@ function drawPoints(){
         let r = Number($(tdSet[2]).text().trim()*2);
         let R = Number($('#rHid').val());
         if(r == R) {
-            if ($(tdSet[3]).text().trim() == 'HEADSHOT') {
+            if ($(tdSet[3]).text().trim() == 'True') {
                 ctx.fillStyle = 'green';
             } else {
                 ctx.fillStyle = 'red';
@@ -91,6 +79,7 @@ function drawPoints(){
             paintArc($(tdSet[0]).text(), $(tdSet[1]).text());
         }
         console.log($(tdSet[0]).text(), $(tdSet[1]).text(),$(tdSet[3]).text());
+
     }
 }
 function drawPicture() {
@@ -158,30 +147,33 @@ function drawGraphWithR(r) {
     ctx.fillStyle='blue';
     ctx.beginPath();
     ctx.moveTo(140,140);
-    ctx.arc(140,140,r/2,1/2*Math.PI,Math.PI,false);
+    ctx.arc(140,140, r/2,Math.PI/2,2*Math.PI,true);
     ctx.fill();
     ctx.beginPath();
     ctx.moveTo(140,140);
-    ctx.fillRect(140,140,r,-r/2);
+    ctx.fillRect(140,140,r/2,-r);
     ctx.beginPath();
-    ctx.lineTo(140+r/2,140);
-    ctx.lineTo(140 ,140+r/2);
+    ctx.lineTo(140-r,140);
+    ctx.lineTo(140 ,140-r);
     ctx.lineTo(140,140);
     ctx.fill();
 }
 function checkX(){
-    let countX=0;
-    for(let i=-5; i<4;i++){
-        if($('#cb'+i).prop('style').color=='blue'){
-            countX++;
-            // console.log("countX = " + countX);
-        }
-    }
-    if(countX==9){
+    let checkX = document.forms['form'].elements['xValue'].value.trim();
+    if (checkX === "") {
         $("#err1").css("visibility", 'visible');
         return false;
-    }else{
-        return true;
+    } else {
+        if (!/^(-?\d+)([.,]\d+)?$/.test(checkX)) {
+            $("#err1").css("visibility", 'visible');
+            $("#err1").text("X может быть только числом!")
+            return false;
+        }
+        if (checkX <= -3 || checkX >= 5) {
+            $("#err1").css("visibility", 'visible');
+            $("#err1").text("X не входит в ОДЗ");
+            return false;
+        }
     }
 }
 function checkY() {

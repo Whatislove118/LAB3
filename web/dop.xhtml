@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>dop</title>
+</h:head>
+<f:view>
+<h:body>
+    <h:form id="form">
+        <h:outputLabel for="name">Name</h:outputLabel>
+        <h:inputText id="name" value="#{person.name}"></h:inputText>
+        <h:outputLabel for="date">Date</h:outputLabel>
+        <h:inputText id="date" value="#{person.date}">
+            <f:convertDateTime type="date" dateStyle="medium"></f:convertDateTime>
+        </h:inputText>
+        <h:outputLabel for="sex">Sex</h:outputLabel>
+        <h:inputText id="sex" value="#{person.sex}"></h:inputText>
+        <h:commandButton type="submit" action="#{person.addPerson()}" value="click">
+            <f:ajax execute="form" render="table"></f:ajax>
+        </h:commandButton>
+    </h:form>
+    <br></br>
+    <h:dataTable var="person" id ="table" value="#{person.arrayList}">
+        <h:column>
+            <f:facet name="header">Name</f:facet>
+            <hr/>
+            #{person.name}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Date</f:facet>
+            <hr/>
+            #{person.date}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Sex</f:facet>
+            <hr/>
+            #{person.sex}
+        </h:column>
+    </h:dataTable>
+</h:body>
+</f:view>
+</html>
